@@ -4,8 +4,9 @@ import com.ajouevent.admin.domain.AdminUser;
 import com.ajouevent.admin.dto.request.LoginRequest;
 import com.ajouevent.admin.dto.request.SignUpRequest;
 import com.ajouevent.admin.dto.response.AdminAuthResponse;
+import com.ajouevent.admin.exception.ApiException;
+import com.ajouevent.admin.exception.ErrorCode;
 import com.ajouevent.admin.repository.AdminUserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public AdminAuthResponse signUp(SignUpRequest request) {
         if (adminUserRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+            throw new ApiException(ErrorCode.USER_DUPLICATED);
         }
 
         AdminUser adminUser = AdminUser.builder()
@@ -38,12 +39,11 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public AdminAuthResponse login(LoginRequest request) {
         AdminUser user = adminUserRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 관리자 계정입니다."));
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new ApiException(ErrorCode.PASSWORD_NOT_CORRECT);
         }
-
         return new AdminAuthResponse(user.getId());
     }
 
