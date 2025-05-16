@@ -1,5 +1,4 @@
 package com.ajouevent.admin.dto.request;
-
 import lombok.Getter;
 import lombok.Setter;
 

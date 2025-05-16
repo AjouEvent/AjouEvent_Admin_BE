@@ -7,6 +7,7 @@ import com.ajouevent.admin.dto.response.AdminAuthResponse;
 import com.ajouevent.admin.exception.ApiException;
 import com.ajouevent.admin.exception.ErrorCode;
 import com.ajouevent.admin.repository.AdminUserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,4 +48,10 @@ public class AdminUserServiceImpl implements AdminUserService {
         return new AdminAuthResponse(user.getId());
     }
 
+    @Override
+    public void logout(HttpSession session) {
+        if (session != null) {
+            session.invalidate(); // 세션 무효화
+        }
+    }
 }
