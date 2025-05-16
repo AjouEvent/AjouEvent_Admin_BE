@@ -1,5 +1,4 @@
-package org.example;
-
+package com.ajouevent.admin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
