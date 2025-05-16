@@ -54,5 +54,4 @@ public class AdminUserServiceImpl implements AdminUserService {
             session.invalidate(); // 세션 무효화
         }
     }
-
 }

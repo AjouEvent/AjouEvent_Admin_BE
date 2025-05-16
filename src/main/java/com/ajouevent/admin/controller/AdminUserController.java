@@ -9,10 +9,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Collections;
 import java.util.Map;
-
 import static java.util.Collections.emptyMap;
 
 @RestController
@@ -21,6 +19,7 @@ import static java.util.Collections.emptyMap;
 public class AdminUserController {
 
     private final AdminUserService adminUserService;
+
 
     @PostMapping("/auth/signup")
     public ResponseEntity<AdminAuthResponse> signUp(@RequestBody SignUpRequest request) {
