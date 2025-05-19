@@ -14,6 +14,7 @@ import org.hibernate.annotations.BatchSize;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "club_events")
 @Builder
 public class ClubEvent {
     @Id
