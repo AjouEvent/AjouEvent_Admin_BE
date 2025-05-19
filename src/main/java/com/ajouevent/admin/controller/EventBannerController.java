@@ -1,6 +1,7 @@
 package com.ajouevent.admin.controller;
 
 import com.ajouevent.admin.domain.EventBanner;
+import com.ajouevent.admin.dto.request.EventBannerRequestDto;
 import com.ajouevent.admin.dto.response.EventBannerResponse;
 import com.ajouevent.admin.service.EventBannerService;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,26 @@ public class EventBannerController {
                 .toList();
 
         return ResponseEntity.ok(response);
+    }
+
+    // Create Banner
+    @PostMapping
+    public ResponseEntity<EventBanner> createBanner(@RequestBody EventBannerRequestDto dto) {
+        EventBanner saved = eventBannerService.createBanner(dto);
+        return ResponseEntity.ok(saved);
+    }
+
+    // Update Banner
+    @PutMapping("/{id}")
+    public ResponseEntity<EventBanner> updateBanner(@PathVariable Long id, @RequestBody EventBannerRequestDto dto) {
+        EventBanner updated = eventBannerService.updateBanner(id, dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    // Delete Banner
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBanner(@PathVariable Long id) {
+        eventBannerService.deleteBanner(id);
+        return ResponseEntity.noContent().build();
     }
 }
