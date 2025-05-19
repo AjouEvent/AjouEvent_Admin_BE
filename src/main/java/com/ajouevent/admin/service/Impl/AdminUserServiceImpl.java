@@ -1,4 +1,4 @@
-package com.ajouevent.admin.service;
+package com.ajouevent.admin.service.Impl;
 
 import com.ajouevent.admin.domain.AdminUser;
 import com.ajouevent.admin.dto.request.LoginRequest;
@@ -7,6 +7,7 @@ import com.ajouevent.admin.dto.response.AdminAuthResponse;
 import com.ajouevent.admin.exception.ApiException;
 import com.ajouevent.admin.exception.ErrorCode;
 import com.ajouevent.admin.repository.AdminUserRepository;
+import com.ajouevent.admin.service.AdminUserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
