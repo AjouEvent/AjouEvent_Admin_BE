@@ -11,7 +11,8 @@ import lombok.*;
 @Builder
 public class Permission {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @Enumerated(EnumType.STRING)
