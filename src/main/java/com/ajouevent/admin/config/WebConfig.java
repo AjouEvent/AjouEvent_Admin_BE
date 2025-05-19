@@ -28,7 +28,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true); // 쿠키 포함 허용!
     }
-
     @Bean
     public FilterRegistrationBean<AdminAuthCheckFilter> adminAuthFilterRegistration() {
         FilterRegistrationBean<AdminAuthCheckFilter> registrationBean = new FilterRegistrationBean<>();
