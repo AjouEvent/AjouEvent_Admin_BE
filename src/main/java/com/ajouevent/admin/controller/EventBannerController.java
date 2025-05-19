@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/banners")
+@RequestMapping("/api/admin/banners")
 @RequiredArgsConstructor
 public class EventBannerController {
 
