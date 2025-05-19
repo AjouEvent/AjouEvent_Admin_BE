@@ -18,3 +18,4 @@ public enum RoleType {
 
     private final Set<PermissionType> defaultPermissions;
 }
+

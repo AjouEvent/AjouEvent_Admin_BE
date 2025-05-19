@@ -8,9 +8,11 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@Table(name = "member_permissions")
 public class MemberPermission {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = LAZY)

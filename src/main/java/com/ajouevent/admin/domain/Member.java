@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "members")
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,13 +41,30 @@ public class Member {
 
 
     @Builder
-    public Member(Long id, String email, String name, String password, String major, String phone, RoleType role) {
-        this.id = id;
-        this.email = email;
+    public Member(String name, String email, RoleType role) {
         this.name = name;
-        this.password = password;
-        this.major = major;
-        this.phone = phone;
+        this.email = email;
         this.role = role;
+
+        // RoleType 기반 권한 자동 부여
+        this.overriddenPermissions = new ArrayList<>();
+        for (PermissionType defaultPermission : role.getDefaultPermissions()) {
+            addPermission(defaultPermission); // 유틸 메서드 사용
+        }
+    }
+    public void addPermission(PermissionType type) {
+        MemberPermission permission = new MemberPermission();
+        permission.setMember(this);
+        permission.setPermissionType(type);
+        overriddenPermissions.add(permission);
+    }
+
+    public void removePermission(PermissionType type) {
+        overriddenPermissions.removeIf(p -> p.getPermissionType() == type);
+    }
+
+    public boolean hasPermission(PermissionType type) {
+        return overriddenPermissions.stream()
+                .anyMatch(p -> p.getPermissionType() == type);
     }
 }

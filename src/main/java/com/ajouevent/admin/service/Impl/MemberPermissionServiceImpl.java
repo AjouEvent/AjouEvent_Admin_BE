@@ -55,16 +55,18 @@ public class MemberPermissionServiceImpl implements MemberPermissionService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEMBER_NOT_FOUND));
 
-        // 기존 오버라이드 권한 제거 (both in DB and in member entity)
-        List<MemberPermission> toRemove = memberPermissionRepository.findByMember(member);
-
-        // JPA 엔티티 컬렉션에서 remove (orphanRemoval 발동)
-        toRemove.forEach(member.getOverriddenPermissions()::remove);
-
-        // 최종적으로 deleteAll로 한 번에 정리 (DB 반영 확실)
-        memberPermissionRepository.deleteAll(toRemove);
-
+        // 역할 변경
         member.setRole(newRole);
+
+        // 기존 오버라이드 권한 모두 제거 (엔티티 자체에서)
+        member.getOverriddenPermissions().clear();
+
+        // 새 역할의 기본 권한 추가
+        for (PermissionType permissionType : newRole.getDefaultPermissions()) {
+            member.addPermission(permissionType);
+        }
+
+        // 한 번에 저장 (cascade로 함께 반영됨)
         memberRepository.save(member);
     }
 
@@ -74,19 +76,12 @@ public class MemberPermissionServiceImpl implements MemberPermissionService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEMBER_NOT_FOUND));
 
-        boolean alreadyGranted = memberPermissionRepository
-                .findByMemberAndPermissionType(member, permissionType)
-                .isPresent();
-
-        if (alreadyGranted) {
+        if (member.hasPermission(permissionType)) {
             throw new ApiException(ErrorCode.PERMISSION_ALREADY_GRANTED);
         }
 
-        MemberPermission permission = new MemberPermission();
-        permission.setMember(member);
-        permission.setPermissionType(permissionType);
-        member.getOverriddenPermissions().add(permission); // maintain bidirectional integrity
-        memberPermissionRepository.save(permission);
+        member.addPermission(permissionType);
+        memberRepository.save(member); // cascade 적용됨
     }
 
     @Override
@@ -94,12 +89,12 @@ public class MemberPermissionServiceImpl implements MemberPermissionService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEMBER_NOT_FOUND));
 
-        MemberPermission permission = memberPermissionRepository
-                .findByMemberAndPermissionType(member, permissionType)
-                .orElseThrow(() -> new ApiException(ErrorCode.PERMISSION_NOT_FOUND));
+        if (!member.hasPermission(permissionType)) {
+            throw new ApiException(ErrorCode.PERMISSION_NOT_FOUND);
+        }
 
-        member.getOverriddenPermissions().remove(permission); // maintain bidirectional integrity
-        memberPermissionRepository.delete(permission);
+        member.removePermission(permissionType);
+        memberRepository.save(member); // 삭제 반영됨 (orphanRemoval)
     }
 
     //member -> memberRespons 변환기
