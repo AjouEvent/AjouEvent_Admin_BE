@@ -3,6 +3,7 @@ package com.ajouevent.admin.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,30 +33,14 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private RoleType role;
 
-//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
-//            CascadeType.REMOVE}, orphanRemoval = true)
-//    private List<Token> tokens;
-//
-//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-//    @ToString.Exclude
-//    private List<Alarm> alarmList;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MemberPermission> overriddenPermissions = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
-//            CascadeType.REMOVE}, orphanRemoval = true)
-//    private List<EventLike> eventLikeList;
-
-//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
-//            CascadeType.REMOVE}, orphanRemoval = true)
-//    private List<TopicMember> topicMembers;
-//
-//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
-//            CascadeType.REMOVE}, orphanRemoval = true)
-//    private List<KeywordMember> keywordMembers;
 
     @Builder
-    public Member(Long id, String email, String name, String password, String major, String phone, Role role) {
+    public Member(Long id, String email, String name, String password, String major, String phone, RoleType role) {
         this.id = id;
         this.email = email;
         this.name = name;
