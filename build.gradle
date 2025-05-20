@@ -22,6 +22,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'mysql:mysql-connector-java:8.0.33'
     runtimeOnly 'com.h2database:h2'
 }
 
