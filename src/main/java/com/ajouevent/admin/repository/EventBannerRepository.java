@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface EventBannerRepository extends JpaRepository<EventBanner, Long> {
     List<EventBanner> findByStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByBannerOrderAsc(LocalDate today1, LocalDate today2);
+    List<EventBanner> findByisPostedTrueOrderByBannerOrderAsc();
 }
