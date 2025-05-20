@@ -20,7 +20,7 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@Table(name = "event_like_table")
+@Table(name = "event_likes")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
