@@ -3,7 +3,9 @@ package com.ajouevent.admin.service;
 import com.ajouevent.admin.domain.EventBanner;
 import com.ajouevent.admin.dto.request.EventBannerRequestDto;
 import com.ajouevent.admin.repository.EventBannerRepository;
+import com.ajouevent.admin.service.s3.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventBannerService {
     private final EventBannerRepository eventBannerRepository;
+    private final S3Uploader s3Uploader;
 
     public List<EventBanner> getActiveBanners() {
         LocalDate today = LocalDate.now();
@@ -48,6 +51,20 @@ public class EventBannerService {
     // Delete Banner
     public void deleteBanner(Long id) {
         eventBannerRepository.deleteById(id);
+    }
+
+    // Scheduling - Auto delete Expire Banner
+    @Scheduled
+    public void deleteExpiredBanners() {
+        LocalDate today = LocalDate.now();
+        List<EventBanner> banners = eventBannerRepository.findAll();
+
+        for (EventBanner banner : banners) {
+            if (banner.isPosted() && banner.getEndDate().isBefore(today)) {
+                banner.setPosted(false);
+                eventBannerRepository.save(banner);
+            }
+        }
     }
 }
 
