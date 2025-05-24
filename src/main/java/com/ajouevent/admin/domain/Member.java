@@ -45,19 +45,20 @@ public class Member {
         this.name = name;
         this.email = email;
         this.role = role;
-
-
         this.overriddenPermissions = new ArrayList<>();
-        for (PermissionType defaultPermission : role.getDefaultPermissions()) {
-            addPermission(defaultPermission);
-
-        }
+        this.setPermissionsByRole(role);
     }
     public void addPermission(PermissionType type) {
         MemberPermission permission = new MemberPermission();
         permission.setMember(this);
         permission.setPermissionType(type);
         overriddenPermissions.add(permission);
+    }
+
+    public void setPermissionsByRole(RoleType role) {
+        for (PermissionType permissionType : role.getDefaultPermissions()) {
+            this.addPermission(permissionType);
+        }
     }
 
     public void removePermission(PermissionType type) {
