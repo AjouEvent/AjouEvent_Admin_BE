@@ -30,6 +30,8 @@ public class BlacklistServiceImpl implements BlacklistService {
             throw new ApiException(ErrorCode.ALREADY_BLACKLISTED);
         }
 
+        member.getOverriddenPermissions().clear();
+
         Blacklist entry = Blacklist.builder()
                 .member(member)
                 .reason(reason)
@@ -49,6 +51,9 @@ public class BlacklistServiceImpl implements BlacklistService {
         }
 
         blacklistRepository.deleteByMember(member);
+        // 역할 기반 권한 재부여
+        member.setPermissionsByRole(member.getRole());
+        memberRepository.save(member);
     }
 
 
