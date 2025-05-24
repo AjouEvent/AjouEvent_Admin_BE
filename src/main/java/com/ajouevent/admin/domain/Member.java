@@ -46,9 +46,11 @@ public class Member {
         this.email = email;
         this.role = role;
 
+
         this.overriddenPermissions = new ArrayList<>();
         for (PermissionType defaultPermission : role.getDefaultPermissions()) {
             addPermission(defaultPermission);
+
         }
     }
     public void addPermission(PermissionType type) {

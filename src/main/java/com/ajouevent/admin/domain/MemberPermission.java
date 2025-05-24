@@ -21,6 +21,8 @@ public class MemberPermission {
     @Enumerated(EnumType.STRING)
     private PermissionType permissionType;
 
+    // 기본값 없이 존재 여부만으로 판단
+
     public void setMember(Member member) {
         this.member = member;
     }
