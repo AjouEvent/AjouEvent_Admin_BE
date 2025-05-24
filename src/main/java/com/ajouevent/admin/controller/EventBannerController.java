@@ -17,12 +17,31 @@ public class EventBannerController {
 
     private final EventBannerService eventBannerService;
 
+//    @GetMapping("/active")
+//    public ResponseEntity<List<EventBannerResponse>> getActiveBanners() {
+//        List<EventBanner> activeBanners = eventBannerService.getActiveBanners();
+//
+//        List<EventBannerResponse> response = activeBanners.stream()
+//                .map(b -> new EventBannerResponse(b.getBannerOrder(), b.getImgUrl(), b.getSiteUrl()))
+//                .toList();
+//
+//        return ResponseEntity.ok(response);
+//    }
+
     @GetMapping("/active")
     public ResponseEntity<List<EventBannerResponse>> getActiveBanners() {
         List<EventBanner> activeBanners = eventBannerService.getActiveBanners();
 
         List<EventBannerResponse> response = activeBanners.stream()
-                .map(b -> new EventBannerResponse(b.getBannerOrder(), b.getImgUrl(), b.getSiteUrl()))
+                .map(b -> new EventBannerResponse(
+                        b.getEventBannerId(),    // 추가
+                        b.getBannerOrder(),
+                        b.getImgUrl(),
+                        b.getSiteUrl(),
+                        b.getStartDate(),        // 추가
+                        b.getEndDate(),          // 추가
+                        b.isPosted()             // 추가
+                ))
                 .toList();
 
         return ResponseEntity.ok(response);
