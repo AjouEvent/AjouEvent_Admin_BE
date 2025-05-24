@@ -46,10 +46,11 @@ public class Member {
         this.email = email;
         this.role = role;
 
-        // RoleType 기반 권한 자동 부여
+
         this.overriddenPermissions = new ArrayList<>();
         for (PermissionType defaultPermission : role.getDefaultPermissions()) {
-            addPermission(defaultPermission); // 유틸 메서드 사용
+            addPermission(defaultPermission);
+
         }
     }
     public void addPermission(PermissionType type) {
