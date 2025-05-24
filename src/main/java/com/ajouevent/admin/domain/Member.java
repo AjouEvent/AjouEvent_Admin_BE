@@ -45,18 +45,20 @@ public class Member {
         this.name = name;
         this.email = email;
         this.role = role;
-
-        // RoleType 기반 권한 자동 부여
         this.overriddenPermissions = new ArrayList<>();
-        for (PermissionType defaultPermission : role.getDefaultPermissions()) {
-            addPermission(defaultPermission); // 유틸 메서드 사용
-        }
+        this.setPermissionsByRole(role);
     }
     public void addPermission(PermissionType type) {
         MemberPermission permission = new MemberPermission();
         permission.setMember(this);
         permission.setPermissionType(type);
         overriddenPermissions.add(permission);
+    }
+
+    public void setPermissionsByRole(RoleType role) {
+        for (PermissionType permissionType : role.getDefaultPermissions()) {
+            this.addPermission(permissionType);
+        }
     }
 
     public void removePermission(PermissionType type) {

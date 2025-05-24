@@ -62,9 +62,7 @@ public class MemberPermissionServiceImpl implements MemberPermissionService {
         member.getOverriddenPermissions().clear();
 
         // 새 역할의 기본 권한 추가
-        for (PermissionType permissionType : newRole.getDefaultPermissions()) {
-            member.addPermission(permissionType);
-        }
+        member.setPermissionsByRole(newRole);
 
         // 한 번에 저장 (cascade로 함께 반영됨)
         memberRepository.save(member);
