@@ -59,7 +59,4 @@ public class PermissionInitializer implements CommandLineRunner {
 //            System.out.println("ℹ️ Members already exist, skipping insert.");
         }
     }
-
-
-
 }
