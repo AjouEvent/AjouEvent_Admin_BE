@@ -1,16 +1,16 @@
 package com.ajouevent.admin.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "inquiries")
+@Builder
 public class Inquiry {
 
     @Id
@@ -41,5 +41,9 @@ public class Inquiry {
         this.answer = answer;
         this.answeredAt = LocalDateTime.now();
         this.status = InquiryStatus.ANSWERED;
+    }
+
+    public void reject() {
+        this.status = InquiryStatus.REJECTED;
     }
 }
