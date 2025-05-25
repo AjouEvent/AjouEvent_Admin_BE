@@ -14,6 +14,6 @@ public interface InquiryService {
 
     void answerInquiry(Long id, String answer);
 
-    void rejectInquiry(Long id);
+    void rejectInquiry(Long id, String answer);
 }
 

@@ -43,7 +43,9 @@ public class Inquiry {
         this.status = InquiryStatus.ANSWERED;
     }
 
-    public void reject() {
+    public void reject(String answer) {
+        this.answer = answer;
+        this.answeredAt = LocalDateTime.now();
         this.status = InquiryStatus.REJECTED;
     }
 }

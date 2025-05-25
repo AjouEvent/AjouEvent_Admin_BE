@@ -49,8 +49,9 @@ public class InquiryController {
 
     // ✅ 5. 관리자 - 문의 거절
     @PatchMapping("/admin/inquiries/{id}/reject")
-    public ResponseEntity<Map<String, Object>> rejectInquiry(@PathVariable Long id) {
-        inquiryService.rejectInquiry(id);
+    public ResponseEntity<Map<String, Object>> rejectInquiry(@PathVariable Long id,
+                                                             @RequestBody InquiryAnswerRequest request) {
+        inquiryService.rejectInquiry(id, request.getAnswer());
         return ResponseEntity.ok(emptyMap());
     }
 }

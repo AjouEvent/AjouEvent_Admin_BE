@@ -10,6 +10,7 @@ import com.ajouevent.admin.exception.ErrorCode;
 import com.ajouevent.admin.repository.InquiryRepository;
 import com.ajouevent.admin.repository.MemberRepository;
 import com.ajouevent.admin.service.InquiryService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -53,18 +54,21 @@ public class InquiryServiceImpl implements InquiryService {
         return InquiryResponse.from(inquiry, inquiry.getMember().getName());
     }
 
+    @Transactional
     @Override
     public void answerInquiry(Long id, String answer) {
         Inquiry inquiry = inquiryRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.INQUIRY_NOT_FOUND));
 
         inquiry.answer(answer);
+        inquiryRepository.save(inquiry);
     }
 
+    @Transactional
     @Override
-    public void rejectInquiry(Long id) {
+    public void rejectInquiry(Long id, String answer) {
         Inquiry inquiry = inquiryRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.INQUIRY_NOT_FOUND));
-        inquiry.reject(); // Inquiry 엔티티에 reject() 메서드 만들 예정
+        inquiry.reject(answer); // Inquiry 엔티티에 reject() 메서드 만들 예정
     }
 }
