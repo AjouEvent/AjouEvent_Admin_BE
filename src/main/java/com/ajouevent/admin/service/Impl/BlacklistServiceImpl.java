@@ -3,7 +3,7 @@ package com.ajouevent.admin.service.Impl;
 import com.ajouevent.admin.domain.Blacklist;
 import com.ajouevent.admin.domain.Member;
 import com.ajouevent.admin.dto.response.BlacklistListResponse;
-import com.ajouevent.admin.dto.response.BlacklistRepository;
+import com.ajouevent.admin.repository.BlacklistRepository;
 import com.ajouevent.admin.dto.response.BlacklistResponse;
 import com.ajouevent.admin.exception.ApiException;
 import com.ajouevent.admin.exception.ErrorCode;

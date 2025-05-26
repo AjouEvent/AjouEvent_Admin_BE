@@ -1,4 +1,4 @@
-package com.ajouevent.admin.dto.response;
+package com.ajouevent.admin.repository;
 
 import com.ajouevent.admin.domain.Blacklist;
 import com.ajouevent.admin.domain.Member;
