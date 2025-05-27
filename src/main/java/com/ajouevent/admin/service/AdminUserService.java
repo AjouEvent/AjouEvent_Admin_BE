@@ -9,5 +9,5 @@ import jakarta.servlet.http.HttpSession;
 public interface AdminUserService {
     AdminAuthResponse signUp(SignUpRequest request);
     AdminAuthResponse login(LoginRequest request);
-    void logout(HttpSession session);
+//    void logout(HttpSession session);
 }
