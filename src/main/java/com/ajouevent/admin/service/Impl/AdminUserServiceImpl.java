@@ -48,11 +48,4 @@ public class AdminUserServiceImpl implements AdminUserService {
         }
         return new AdminAuthResponse(user.getId());
     }
-
-    @Override
-    public void logout(HttpSession session) {
-        if (session != null) {
-            session.invalidate(); // 세션 무효화
-        }
-    }
 }
