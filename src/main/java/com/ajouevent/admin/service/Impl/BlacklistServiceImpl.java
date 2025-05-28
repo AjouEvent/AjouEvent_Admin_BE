@@ -45,16 +45,16 @@ public class BlacklistServiceImpl implements BlacklistService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEMBER_NOT_FOUND));
 
-        boolean exists = blacklistRepository.existsByMember(member);
-        if (!exists) {
-            throw new ApiException(ErrorCode.BLACKLIST_ENTRY_NOT_FOUND);
-        }
+        Blacklist blacklist = blacklistRepository.findByMember(member)
+                .orElseThrow(() -> new ApiException(ErrorCode.BLACKLIST_ENTRY_NOT_FOUND));
 
-        blacklistRepository.deleteByMember(member);
+        blacklistRepository.delete(blacklist); // ✅ 명시적으로 엔티티 삭제
+
         // 역할 기반 권한 재부여
         member.setPermissionsByRole(member.getRole());
         memberRepository.save(member);
     }
+
 
 
     @Override

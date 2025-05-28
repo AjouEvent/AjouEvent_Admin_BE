@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
+import static java.util.Collections.emptyMap;
+
 @RestController
 @RequestMapping("/api/admin/members")
 @RequiredArgsConstructor
@@ -15,17 +19,18 @@ public class BlacklistController {
     private final BlacklistService blacklistService;
 
     @PostMapping("/{id}/blacklist")
-    public ResponseEntity<Void> registerBlacklist(@PathVariable Long id,
-                                                  @RequestBody BlacklistRequest request) {
+    public ResponseEntity<Map<String, Object>> registerBlacklist(@PathVariable Long id,
+                                                                 @RequestBody BlacklistRequest request) {
         blacklistService.register(id, request.getReason());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(emptyMap());
     }
 
     @DeleteMapping("/{id}/blacklist")
-    public ResponseEntity<Void> revokeBlacklist(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> revokeBlacklist(@PathVariable Long id) {
         blacklistService.revoke(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(emptyMap());
     }
+
 
     @GetMapping("/blacklist")
     public ResponseEntity<BlacklistListResponse> getAllBlacklist() {
