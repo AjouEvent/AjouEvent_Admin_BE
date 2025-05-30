@@ -1,6 +1,7 @@
 package com.ajouevent.admin.domain;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "member_permissions")
 public class MemberPermission {
 
