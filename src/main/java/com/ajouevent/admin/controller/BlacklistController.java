@@ -2,6 +2,7 @@ package com.ajouevent.admin.controller;
 
 import com.ajouevent.admin.dto.request.BlacklistRequest;
 import com.ajouevent.admin.dto.response.BlacklistListResponse;
+import com.ajouevent.admin.dto.response.MemberListResponse;
 import com.ajouevent.admin.service.BlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,10 @@ public class BlacklistController {
     @GetMapping("/blacklist")
     public ResponseEntity<BlacklistListResponse> getAllBlacklist() {
         return ResponseEntity.ok(blacklistService.getAll());
+    }
+
+    @GetMapping("/non-blacklisted")
+    public ResponseEntity<MemberListResponse> getNonBlacklistedMembers() {
+        return ResponseEntity.ok(blacklistService.getNonBlacklistedMembers());
     }
 }

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "members")
@@ -39,6 +38,8 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberPermission> overriddenPermissions = new ArrayList<>();
 
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Blacklist blacklist;
 
     @Builder
     public Member(String name, String email, RoleType role) {
@@ -48,6 +49,7 @@ public class Member {
         this.overriddenPermissions = new ArrayList<>();
         this.setPermissionsByRole(role);
     }
+
     public void addPermission(PermissionType type) {
         MemberPermission permission = new MemberPermission();
         permission.setMember(this);
@@ -68,5 +70,21 @@ public class Member {
     public boolean hasPermission(PermissionType type) {
         return overriddenPermissions.stream()
                 .anyMatch(p -> p.getPermissionType() == type);
+    }
+
+    public void assignBlacklist(Blacklist blacklist) {
+        this.blacklist = blacklist;
+        blacklist.setMember(this);
+    }
+
+    public void revokeBlacklist() {
+        if (this.blacklist != null) {
+            this.blacklist.setMember(null);
+            this.blacklist = null;
+        }
+    }
+
+    public boolean isBlacklisted() {
+        return this.blacklist != null;
     }
 }

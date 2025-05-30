@@ -10,8 +10,8 @@ import com.ajouevent.admin.exception.ErrorCode;
 import com.ajouevent.admin.repository.InquiryRepository;
 import com.ajouevent.admin.repository.MemberRepository;
 import com.ajouevent.admin.service.InquiryService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
