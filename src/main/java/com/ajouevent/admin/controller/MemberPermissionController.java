@@ -3,10 +3,16 @@ package com.ajouevent.admin.controller;
 import com.ajouevent.admin.dto.request.ChangeRoleRequest;
 import com.ajouevent.admin.dto.request.PermissionUpdateRequest;
 import com.ajouevent.admin.dto.response.MemberListResponse;
+import com.ajouevent.admin.dto.response.PermissionUpdateResponse;
 import com.ajouevent.admin.service.MemberPermissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Objects;
+
+import static java.util.Collections.emptyMap;
 
 @RestController
 @RequestMapping("/api/admin/members")
@@ -24,23 +30,17 @@ public class MemberPermissionController {
     }
 
     @PatchMapping("/{id}/role")
-    public ResponseEntity<Void> changeRole(@PathVariable Long id,
-                                           @RequestBody ChangeRoleRequest request) {
+    public ResponseEntity<Map<String, Objects>> changeRole(@PathVariable Long id,
+                                                           @RequestBody ChangeRoleRequest request) {
         memberPermissionService.changeRole(id, request.getRole());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(emptyMap());
     }
 
-    @PostMapping("/{id}/permissions")
-    public ResponseEntity<Void> grantPermission(@PathVariable Long id,
-                                                @RequestBody PermissionUpdateRequest request) {
-        memberPermissionService.grantPermission(id, request.getPermission());
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{id}/permissions")
-    public ResponseEntity<Void> revokePermission(@PathVariable Long id,
-                                                 @RequestBody PermissionUpdateRequest request) {
-        memberPermissionService.revokePermission(id, request.getPermission());
-        return ResponseEntity.ok().build();
+    @PutMapping("/{id}/permissions")
+    public ResponseEntity<PermissionUpdateResponse> updatePermissions(
+            @PathVariable Long id,
+            @RequestBody PermissionUpdateRequest request) {
+        PermissionUpdateResponse response = memberPermissionService.updateMemberPermissions(id, request);
+        return ResponseEntity.ok(response);
     }
 }
