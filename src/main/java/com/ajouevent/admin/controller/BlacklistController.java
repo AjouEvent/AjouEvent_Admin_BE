@@ -2,10 +2,16 @@ package com.ajouevent.admin.controller;
 
 import com.ajouevent.admin.dto.request.BlacklistRequest;
 import com.ajouevent.admin.dto.response.BlacklistListResponse;
+import com.ajouevent.admin.dto.response.MemberListResponse;
 import com.ajouevent.admin.service.BlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
+import java.util.Map;
+
+import static java.util.Collections.emptyMap;
 
 @RestController
 @RequestMapping("/api/admin/members")
@@ -15,20 +21,26 @@ public class BlacklistController {
     private final BlacklistService blacklistService;
 
     @PostMapping("/{id}/blacklist")
-    public ResponseEntity<Void> registerBlacklist(@PathVariable Long id,
-                                                  @RequestBody BlacklistRequest request) {
+    public ResponseEntity<Map<String, Objects>> registerBlacklist(@PathVariable Long id,
+                                                                  @RequestBody BlacklistRequest request) {
         blacklistService.register(id, request.getReason());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(emptyMap());
     }
 
     @DeleteMapping("/{id}/blacklist")
-    public ResponseEntity<Void> revokeBlacklist(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Objects>> revokeBlacklist(@PathVariable Long id) {
         blacklistService.revoke(id);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok(emptyMap());
     }
 
     @GetMapping("/blacklist")
     public ResponseEntity<BlacklistListResponse> getAllBlacklist() {
         return ResponseEntity.ok(blacklistService.getAll());
+    }
+
+    @GetMapping("/non-blacklisted")
+    public ResponseEntity<MemberListResponse> getNonBlacklistedMembers() {
+        return ResponseEntity.ok(blacklistService.getNonBlacklistedMembers());
     }
 }

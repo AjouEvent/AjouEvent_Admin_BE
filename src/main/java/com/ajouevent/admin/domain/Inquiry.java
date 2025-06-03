@@ -2,6 +2,8 @@ package com.ajouevent.admin.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +20,9 @@ public class Inquiry {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member; // 작성자
+    @JoinColumn(name = "member_id", nullable = false, unique = true)
+    @OnDelete(action = OnDeleteAction.CASCADE) // 멤버가 삭제되면 블랙리스트 행도 삭제 된다
+    private Member member;
 
     private String title;
     private String content;
@@ -41,11 +45,5 @@ public class Inquiry {
         this.answer = answer;
         this.answeredAt = LocalDateTime.now();
         this.status = InquiryStatus.ANSWERED;
-    }
-
-    public void reject(String answer) {
-        this.answer = answer;
-        this.answeredAt = LocalDateTime.now();
-        this.status = InquiryStatus.REJECTED;
     }
 }
