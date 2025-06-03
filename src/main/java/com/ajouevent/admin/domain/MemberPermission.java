@@ -18,6 +18,7 @@ public class MemberPermission {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
+    @EqualsAndHashCode.Include
     private Member member;
 
     @Enumerated(EnumType.STRING)

@@ -5,7 +5,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -37,12 +40,11 @@ public class Member {
     private RoleType role;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("permissionType ASC")
     @ToString.Exclude
     @JsonIgnore
     private List<MemberPermission> overriddenPermissions = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Blacklist blacklist;
 
     @Builder
     public Member(String name, String email, RoleType role) {
@@ -53,11 +55,36 @@ public class Member {
         this.setPermissionsByRole(role);
     }
 
+    public void updatePermissions(Set<PermissionType> newPermissions) {
+        // 현재 권한 추출
+        Set<PermissionType> current = this.overriddenPermissions.stream()
+                .map(MemberPermission::getPermissionType)
+                .collect(Collectors.toSet());
+
+        // 추가할 권한
+        Set<PermissionType> toAdd = new HashSet<>(newPermissions);
+        toAdd.removeAll(current);
+
+        // 제거할 권한
+        Set<PermissionType> toRemove = new HashSet<>(current);
+        toRemove.removeAll(newPermissions);
+
+        // 제거
+        this.overriddenPermissions.removeIf(p -> toRemove.contains(p.getPermissionType()));
+
+        // 추가
+        toAdd.forEach(this::addPermission);
+    }
+
     public void addPermission(PermissionType type) {
         MemberPermission permission = new MemberPermission();
-        permission.setMember(this);
         permission.setPermissionType(type);
-        overriddenPermissions.add(permission);
+        permission.setMember(this);
+        this.overriddenPermissions.add(permission);
+    }
+
+    public void setRole(RoleType role) {
+        this.role = role;
     }
 
     public void setPermissionsByRole(RoleType role) {
@@ -75,19 +102,4 @@ public class Member {
                 .anyMatch(p -> p.getPermissionType() == type);
     }
 
-    public void assignBlacklist(Blacklist blacklist) {
-        this.blacklist = blacklist;
-        blacklist.setMember(this);
-    }
-
-    public void revokeBlacklist() {
-        if (this.blacklist != null) {
-            this.blacklist.setMember(null);
-            this.blacklist = null;
-        }
-    }
-
-    public boolean isBlacklisted() {
-        return this.blacklist != null;
-    }
 }
