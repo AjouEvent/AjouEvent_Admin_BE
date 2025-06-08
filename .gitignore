@@ -23,8 +23,5 @@ build/
 # Others
 out/
 
-
-
-application-local.properties
-/src/main/resources/application-local.properties
-
+# application-local
+src/main/resources/application-local.properties
