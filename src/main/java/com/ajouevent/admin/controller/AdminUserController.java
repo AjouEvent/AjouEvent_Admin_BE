@@ -5,6 +5,7 @@ import com.ajouevent.admin.dto.request.LoginRequest;
 import com.ajouevent.admin.dto.response.AdminAuthResponse;
 import com.ajouevent.admin.service.AdminUserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,20 +29,24 @@ public class AdminUserController {
 
     @PostMapping("/auth/login")
     public ResponseEntity<AdminAuthResponse> login(@RequestBody LoginRequest request,
-                                                   HttpServletRequest req) {
+                                                   HttpServletRequest req,
+                                                   HttpServletResponse res) {
         AdminAuthResponse response = adminUserService.login(request);
 
-        //일단 인메모리 세션으로 관리 나중에 redis 붙일라고 함
         HttpSession session = req.getSession(true);
         session.setAttribute("adminId", response.getId());
+        res.setHeader("X-Session-Id", session.getId());
 
         return ResponseEntity.ok(response);
     }
 
     //세션 인증을 먼저 하고 삭제 하는 로직.
     @PostMapping("/admin/logout")
-    public ResponseEntity<Map<String, Object>> logout(HttpSession session) {
-        adminUserService.logout(session);
+    public ResponseEntity<Map<String, Object>> logout(HttpServletRequest req) {
+        HttpSession session = req.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
         return ResponseEntity.ok(emptyMap());
     }
 }

@@ -1,9 +1,11 @@
 package com.ajouevent.admin.dto.request;
 
 import com.ajouevent.admin.domain.PermissionType;
-import lombok.Getter;
+import lombok.Data;
+import java.util.Set;
 
-@Getter
+
+@Data
 public class PermissionUpdateRequest {
-    private PermissionType permission;
+    private Set<PermissionType> permissions;
 }
