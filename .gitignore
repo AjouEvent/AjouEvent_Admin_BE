@@ -6,7 +6,6 @@
 .gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
-.gradle/
 **/build/
 !gradle-wrapper.jar
 
@@ -26,3 +25,5 @@ out/
 # application-local
 src/main/resources/application-local.properties
 
+src/main/resources/keystore.p12
+src/main/resources/static/*
