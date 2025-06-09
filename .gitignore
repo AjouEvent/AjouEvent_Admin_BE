@@ -24,6 +24,7 @@ out/
 
 # application-local
 src/main/resources/application-local.properties
+src/main/resources/application-prop.properties
 
 src/main/resources/keystore.p12
 src/main/resources/static/*
