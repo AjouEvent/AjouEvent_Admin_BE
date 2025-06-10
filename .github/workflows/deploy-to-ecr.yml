@@ -1,0 +1,35 @@
+name: Deploy to ECR
+
+on:
+  push:
+    branches:
+      - CI_ecr-test
+
+jobs:
+  push-to-ecr:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+        #깃 소스코드 복사 "레포 -> 깃헙액션 vm"
+#      - name: Checkout source
+#        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.ECR_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ECR_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Docker image
+        run: |
+          IMAGE_URI=879084048693.dkr.ecr.ap-northeast-2.amazonaws.com/my_image_hub
+          docker build -t $IMAGE_URI:latest .
+          docker push $IMAGE_URI:latest
