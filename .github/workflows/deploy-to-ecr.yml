@@ -30,6 +30,23 @@ jobs:
           sudo apt-get update && sudo apt-get install -y gettext
           export KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
           envsubst < src/main/resources/application-prop.properties.template > src/main/resources/application-prop.properties
+          
+          echo "========== application-prop.properties preview =========="
+          cat src/main/resources/application-prop.properties
+          echo "========================================================="
+          
+          echo "========== application-prop.properties preview =========="
+          cat src/main/resources/application-prop.properties
+          echo "========================================================="
+          
+          echo "--- BEFORE TEMPLATE ---"
+          cat src/main/resources/application-prop.properties.template
+          echo "--- AFTER envsubst ---"
+          cat src/main/resources/application-prop.properties
+          
+          echo "🔍 Checking for un-replaced template variables..."
+          grep '\${' src/main/resources/application-prop.properties && (echo ' 치환 안 된 변수 있음!' && exit 1) || echo ' 모든 변수 치환 완료!' 
+
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
