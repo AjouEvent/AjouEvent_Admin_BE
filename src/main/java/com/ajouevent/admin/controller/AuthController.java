@@ -16,7 +16,7 @@ import static java.util.Collections.emptyMap;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class AdminUserController {
+public class AuthController {
 
     private final AdminUserService adminUserService;
 
