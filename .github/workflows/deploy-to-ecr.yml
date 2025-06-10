@@ -15,8 +15,8 @@ jobs:
 
     steps:
         #깃 소스코드 복사 "레포 -> 깃헙액션 vm"
-#      - name: Checkout source
-#        uses: actions/checkout@v4
+      - name: Checkout source
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
