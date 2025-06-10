@@ -21,11 +21,13 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
+      - name: Restore keystore.p12 from base64
+        run: |
+          echo "${{ secrets.KEYSTORE_FILE_BASE64 }}" | base64 -d > src/main/resources/keystore.p12
+
       - name: Create application-prop.properties from template
         run: |
           sudo apt-get update && sudo apt-get install -y gettext
-          export DB_USERNAME=${{ secrets.DB_USERNAME }}
-          export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
           export KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
           envsubst < src/main/resources/application-prop.properties.template > src/main/resources/application-prop.properties
 
