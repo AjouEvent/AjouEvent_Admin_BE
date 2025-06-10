@@ -22,24 +22,19 @@ public class PermissionInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-//
-//        for (PermissionType type : PermissionType.values()) {
-//            boolean exists = permissionRepository.findByType(type).isPresent();
-////            System.out.println("🔍 " + type.name() + " exists? " + exists);
-//
-//            if (!exists) {
-////                System.out.println("💾 Saving permission: " + type.name());
-//                permissionRepository.save(
-//                        Permission.builder()
-//                                .type(type)
-//                                .description(type.getDescription())
-//                                .build()
-//                );
-//            }
-//        }
-//
-        // 2. Member 더미 삽입
-        if (memberRepository.count() == 0) { // 안 겹치게
+        for (PermissionType type : PermissionType.values()) {
+            boolean exists = permissionRepository.findByType(type).isPresent();
+            if (!exists) {
+                permissionRepository.save(
+                        Permission.builder()
+                                .type(type)
+                                .description(type.getDescription())
+                                .build()
+                );
+            }
+        }
+
+        if (memberRepository.count() == 0) {
             Member m1 = Member.builder()
                     .name("최민준")
                     .email("alswns@ajou.ac.kr")
@@ -88,8 +83,4 @@ public class PermissionInitializer implements CommandLineRunner {
             memberRepository.saveAll(List.of(m1, m2, m3,m4,m5,m6,m7,m8));
         }
     }
-//
-//
-//
-//
 }
