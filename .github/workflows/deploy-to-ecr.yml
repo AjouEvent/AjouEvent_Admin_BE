@@ -43,10 +43,13 @@ jobs:
       - name: Clean and Build with Gradle
         run: ./gradlew clean build
 
+      - name: Set lowercase version
+        run: echo "VERSION=$(echo '${{ env.VERSION }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Docker image Build and Tag
         working-directory: .
         run: |
-          docker build $IMAGE_IRL:latest .
+          docker build $IMAGE_URI:latest .
           docker tag $IMAGE_URI:latest $IMAGE_URI:$VERSION
 
       - name: Docker Image Push
