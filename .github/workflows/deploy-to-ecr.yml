@@ -1,4 +1,4 @@
-name: Deploy to ECR
+name: Build & Push Docker Image
 
 on:
   workflow_dispatch:
@@ -14,9 +14,9 @@ jobs:
       id-token: write
       contents: read
 
-    env:
-      IMAGE_URI: 879084048693.dkr.ecr.ap-northeast-2.amazonaws.com/my_image_hub
-      VERSION: ${{ github.ref_name }}_${{ github.run_number }}
+#    env:
+#      IMAGE_URI: 879084048693.dkr.ecr.ap-northeast-2.amazonaws.com/my_image_hub
+#      VERSION: ${{ github.ref_name }}_${{ github.run_number }}
 
     steps:
       - name: Checkout source
@@ -30,22 +30,12 @@ jobs:
         run: |
           ls -lh src/main/resources/keystore.p12
           file src/main/resources/keystore.p12
+          test -s src/main/resources/keystore.p12 || (echo "keystore.p12 is empty or missing" && exit 1)
 
-      - name: Copy keystore.p12 into fake build path
+      - name: Check keystore.p12 metadata
         run: |
-          mkdir -p backend/build/resources/main
-          cp src/main/resources/keystore.p12 backend/build/resources/main/keystore.p12
-
-      - name: Simulate jar packaging
-        run: |
-          mkdir -p backend/build/libs
-          cd backend/build/resources/main
-          zip ../../libs/fake.jar keystore.p12
-          echo "📦 fake.jar created with keystore.p12"
-
-      - name: Check keystore.p12 inside fake jar
-        run: |
-          unzip -l backend/build/libs/fake.jar | grep keystore.p12 || echo "❌ keystore.p12 not found in JAR"
+          ls -lh src/main/resources/keystore.p12
+          file src/main/resources/keystore.p12
 
       - name: Create application-prop.properties from template
         run: |
@@ -53,26 +43,12 @@ jobs:
           export KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
           envsubst < src/main/resources/application-prop.properties.template > src/main/resources/application-prop.properties
           
-          echo "========== application-prop.properties preview =========="
+          echo "✅ application-prop.properties generated"
+          echo "===== GENERATED PROPERTIES ====="
           cat src/main/resources/application-prop.properties
-          echo "========================================================="
+          echo "================================"
           
-          echo "========== application-prop.properties preview =========="
-          cat src/main/resources/application-prop.properties
-          echo "========================================================="
-          
-          echo "--- BEFORE TEMPLATE ---"
-          cat src/main/resources/application-prop.properties.template
-          echo "--- AFTER envsubst ---"
-          cat src/main/resources/application-prop.properties
-          
-          echo "🔍 Checking for un-replaced template variables..."
-          grep '\${' src/main/resources/application-prop.properties && (echo ' 치환 안 된 변수 있음!' && exit 1) || echo ' 모든 변수 치환 완료!' 
-
-      - name: Check keystore.p12 inside jar
-        run: |
-          unzip -l backend/build/libs/*.jar | grep keystore.p12 || echo "❌ keystore.p12 not found in JAR"
-
+          test -s src/main/resources/application-prop.properties || (echo "❌ Failed to create application-prop.properties" && exit 1)
 
 #      - name: Set up JDK 17
 #        uses: actions/setup-java@v3

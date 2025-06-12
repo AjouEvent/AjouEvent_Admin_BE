@@ -1,10 +1,10 @@
 name: Deploy to EC2
 
 on:
-#  workflow_dispatch:
-  push:
-      branches:
-        - CI_ecr-test
+  workflow_dispatch:
+#  push:
+#      branches:
+#        - CI_ecr-test
 jobs:
   deploy:
     runs-on: ubuntu-latest
