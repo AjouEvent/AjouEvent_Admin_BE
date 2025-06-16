@@ -15,6 +15,7 @@ import org.hibernate.annotations.BatchSize;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "club_events")
 public class ClubEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,6 +57,12 @@ public class ClubEvent {
     @Column(nullable = false)
     private boolean isHidden;
 
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        if (this.likesCount == null) this.likesCount = 0L;
+        if (this.viewCount == null) this.viewCount = 0L;
+    }
 
     public void incrementLikes() {
         this.likesCount++;
@@ -65,10 +72,11 @@ public class ClubEvent {
         this.likesCount--;
     }
 
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-        if (this.likesCount == null) this.likesCount = 0L;
-        if (this.viewCount == null) this.viewCount = 0L;
+    public void hide() {
+        this.isHidden = true;
+    }
+
+    public void unhide() {
+        this.isHidden = false;
     }
 }

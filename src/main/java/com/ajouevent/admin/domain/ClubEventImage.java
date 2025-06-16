@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "club_event_images")
 public class ClubEventImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
