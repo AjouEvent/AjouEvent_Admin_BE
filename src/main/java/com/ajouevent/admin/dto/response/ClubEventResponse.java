@@ -1,6 +1,7 @@
 package com.ajouevent.admin.dto.response;
 
 import com.ajouevent.admin.domain.ClubEvent;
+import com.ajouevent.admin.domain.ClubEventSubject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,22 +21,22 @@ public class ClubEventResponse {
     private String url;
     private Long likesCount;
     private Long viewCount;
-    private String type;
+//    private String type;
     private boolean isHidden;
     private LocalDateTime createdAt;
     private List<String> imageUrls;
 
-    public static ClubEventResponse from(ClubEvent entity, List<String> imageUrls) {
+    public static ClubEventResponse from(ClubEvent entity, List<String> imageUrls, ClubEventSubject subject) {
         return ClubEventResponse.builder()
                 .eventId(entity.getEventId())
                 .title(entity.getTitle())
                 .content(entity.getContent())
                 .writer(entity.getWriter())
-                .subject(entity.getSubject())
+                .subject(subject.getName())
                 .url(entity.getUrl())
                 .likesCount(entity.getLikesCount())
                 .viewCount(entity.getViewCount())
-                .type(entity.getType().name())
+//                .type(entity.getType().name())
                 .isHidden(entity.isHidden())
                 .createdAt(entity.getCreatedAt())
                 .imageUrls(imageUrls)

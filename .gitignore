@@ -31,4 +31,4 @@ src/main/resources/static/*
 
 dbdata/
 
-.github
+.github/workflows/deploy.yml

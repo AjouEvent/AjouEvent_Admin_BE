@@ -14,7 +14,7 @@ public class ClubEventCreateRequest {
     private String title;
     private String content;
     private String writer;
-    private String subject;
+    private Long subjectId;
     private String url;
     private Type type;
 }

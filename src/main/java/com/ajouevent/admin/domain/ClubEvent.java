@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.BatchSize;
@@ -33,8 +34,9 @@ public class ClubEvent {
     @Column // 게시글 생성 시간
     private LocalDateTime createdAt;
 
-    @Column // 게시글 분류(topic) - 아주대학교 - 일반, 소프트웨어학과, 동아리
-    private String subject;
+    @ManyToOne
+    @JoinColumn(name = "club_event_subject_id", nullable = false)
+    private ClubEventSubject subject;
 
     @Column // 원래 공지사항 url
     private String url;
@@ -52,7 +54,8 @@ public class ClubEvent {
     @BatchSize(size=100) //
     @OneToMany(mappedBy = "clubEvent", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @ToString.Exclude
-    private List<ClubEventImage> clubEventImageList;
+    @Builder.Default
+    private List<ClubEventImage> clubEventImageList = new ArrayList<>();
 
     @Column(nullable = false)
     private boolean isHidden;

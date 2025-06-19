@@ -14,9 +14,9 @@ public enum ErrorCode {
     ALREADY_BLACKLISTED(400301, "이미 블랙리스트에 등록된 회원입니다."),
     BLACKLIST_ENTRY_NOT_FOUND(404302, "블랙리스트에 등록되지 않은 회원입니다."),
     INQUIRY_NOT_FOUND(404601, "존재하지 않는 문의입니다."),
-    INVALID_SUBJECT(400003, "patchNote만 등록할 수 있습니다."),
     CLUB_EVENT_NOT_FOUND(404003, "이벤트를 찾을 수 없습니다."),
-    FILE_UPLOAD_FAILED(500001, "파일 업로드에 실패했습니다.");
+    FILE_UPLOAD_FAILED(500001, "파일 업로드에 실패했습니다."),
+    CLUB_EVENT_SUBJECT_NOT_FOUND(404004, "해당 주제(subject)를 찾을 수 없습니다.");
     private final int code;
     private final String message;
 }

@@ -3,6 +3,7 @@ package com.ajouevent.admin.controller;
 import com.ajouevent.admin.dto.request.ClubEventCreateRequest;
 import com.ajouevent.admin.dto.response.ClubEventListResponse;
 import com.ajouevent.admin.dto.response.ClubEventResponse;
+import com.ajouevent.admin.dto.response.EventSubjectListResponse;
 import com.ajouevent.admin.service.ClubEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -31,35 +32,40 @@ public class ClubEventController {
         return ResponseEntity.ok(emptyMap());
     }
 
+    @GetMapping("/subjects")
+    public ResponseEntity<EventSubjectListResponse> findAllSubject() {
+        return ResponseEntity.ok(clubEventService.findAllSubjects());
+    }
+
     @GetMapping
-    public ResponseEntity<ClubEventListResponse> findAll() {
-        return ResponseEntity.ok(clubEventService.findAll());
+    public ResponseEntity<ClubEventListResponse> findAll(@RequestParam(required = false) Long subjectId) {
+        return ResponseEntity.ok(clubEventService.findAll(subjectId));
     }
 
     @GetMapping("/visible")
-    public ResponseEntity<ClubEventListResponse> findVisible(@RequestParam(required = false) String subject) {
-        return ResponseEntity.ok(clubEventService.findAllVisible(subject));
+    public ResponseEntity<ClubEventListResponse> findVisible(@RequestParam(required = false) Long subjectId) {
+        return ResponseEntity.ok(clubEventService.findAllVisible(subjectId));
     }
 
     @GetMapping("/hidden")
-    public ResponseEntity<ClubEventListResponse> findHidden(@RequestParam(required = false) String subject) {
-        return ResponseEntity.ok(clubEventService.findAllHidden(subject));
+    public ResponseEntity<ClubEventListResponse> findHidden(@RequestParam(required = false) Long subjectId) {
+        return ResponseEntity.ok(clubEventService.findAllHidden(subjectId));
     }
 
     @GetMapping("/{eventId}")
-    public ResponseEntity<ClubEventResponse> findById(@PathVariable Long eventId) {
-        return ResponseEntity.ok(clubEventService.findById(eventId));
+    public ResponseEntity<ClubEventResponse> findById(@PathVariable("eventId") Long id) {
+        return ResponseEntity.ok(clubEventService.findById(id));
     }
 
     @PatchMapping("/{eventId}/hide")
-    public ResponseEntity<Map<String, Object>> hide(@PathVariable Long eventId) {
-        clubEventService.hide(eventId);
+    public ResponseEntity<Map<String, Object>> hide(@PathVariable("eventId") Long id) {
+        clubEventService.hide(id);
         return ResponseEntity.ok(emptyMap());
     }
 
     @PatchMapping("/{eventId}/show")
-    public ResponseEntity<Map<String, Object>> unhide(@PathVariable Long eventId) {
-        clubEventService.unhide(eventId);
+    public ResponseEntity<Map<String, Object>> unhide(@PathVariable("eventId") Long id) {
+        clubEventService.unhide(id);
         return ResponseEntity.ok(emptyMap());
     }
 }
