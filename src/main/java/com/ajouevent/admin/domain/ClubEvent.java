@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.BatchSize;
@@ -14,8 +15,8 @@ import org.hibernate.annotations.BatchSize;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "club_events")
 @Builder
+@Table(name = "club_events")
 public class ClubEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +34,9 @@ public class ClubEvent {
     @Column // 게시글 생성 시간
     private LocalDateTime createdAt;
 
-    @Column // 게시글 분류(topic) - 아주대학교 - 일반, 소프트웨어학과, 동아리
-    private String subject;
+    @ManyToOne
+    @JoinColumn(name = "club_event_subject_id", nullable = false)
+    private ClubEventSubject subject;
 
     @Column // 원래 공지사항 url
     private String url;
@@ -45,52 +47,39 @@ public class ClubEvent {
     @Column // 조회 수 (default는 0)
     private Long viewCount;
 
-//    @Column(length = 50000)
-//    @Enumerated(value = EnumType.STRING)
-//    private Type type;
+    @Column(length = 50000)
+    @Enumerated(value = EnumType.STRING)
+    private Type type;
 
-//    @BatchSize(size=100) //
-//    @OneToMany(mappedBy = "clubEvent", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-//    @ToString.Exclude
-//    private List<ClubEventImage> clubEventImageList;
+    @BatchSize(size=100) //
+    @OneToMany(mappedBy = "clubEvent", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @ToString.Exclude
+    @Builder.Default
+    private List<ClubEventImage> clubEventImageList = new ArrayList<>();
 
-//    public void updateEvent(UpdateEventRequest request) {
-//        if (request.getTitle() != null) {
-//            this.title = request.getTitle();
-//        }
-//        if (request.getContent() != null) {
-//            this.content = request.getContent();
-//        }
-//        if (request.getWriter() != null) {
-//            this.writer = request.getWriter();
-//        }
-//        if (request.getSubject() != null) {
-//            this.subject = request.getSubject();
-//        }
-//        if (request.getUrl() != null) {
-//            this.url = request.getUrl();
-//        }
-//        if (request.getType() != null) {
-//            this.type = request.getType();
-//        }
-//        // date는 일반적으로 업데이트 요청 시 현재 시간으로 설정하는 것이 일반적이므로 주석 처리
-//        this.createdAt = LocalDateTime.now();
-//    }
+    @Column(nullable = false)
+    private boolean isHidden;
 
-    // 게시글의 저장수 증가
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        if (this.likesCount == null) this.likesCount = 0L;
+        if (this.viewCount == null) this.viewCount = 0L;
+    }
+
     public void incrementLikes() {
         this.likesCount++;
     }
 
-    // 게시글의 저장수 감소
     public void decreaseLikes() {
         this.likesCount--;
     }
 
-    // // 게시글의 조회수 증가
-    // public void increaseViewCount() {
-    //     this.viewCount++; // 조회수 증가
-    // }
+    public void hide() {
+        this.isHidden = true;
+    }
 
-
+    public void unhide() {
+        this.isHidden = false;
+    }
 }

@@ -30,3 +30,5 @@ src/main/resources/keystore.p12
 src/main/resources/static/*
 
 dbdata/
+
+.github/workflows/deploy.yml

@@ -1,9 +1,8 @@
 package com.ajouevent.admin.init;
 
-import com.ajouevent.admin.domain.Permission;
-import com.ajouevent.admin.domain.PermissionType;
-import com.ajouevent.admin.domain.RoleType;
-import com.ajouevent.admin.domain.Member;
+import com.ajouevent.admin.domain.*;
+import com.ajouevent.admin.repository.ClubEventImageRepository;
+import com.ajouevent.admin.repository.ClubEventRepository;
 import com.ajouevent.admin.repository.MemberRepository;
 import com.ajouevent.admin.repository.PermissionRepository;
 import jakarta.annotation.PostConstruct;
@@ -11,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -19,6 +19,9 @@ public class PermissionInitializer implements CommandLineRunner {
 
     private final PermissionRepository permissionRepository;
     private final MemberRepository memberRepository;
+
+    private final ClubEventRepository clubEventRepository;
+    private final ClubEventImageRepository clubEventImageRepository;
 
     @Override
     public void run(String... args) {
@@ -80,7 +83,7 @@ public class PermissionInitializer implements CommandLineRunner {
                     .role(RoleType.LEADER)
                     .build();
 
-            memberRepository.saveAll(List.of(m1, m2, m3,m4,m5,m6,m7,m8));
+            memberRepository.saveAll(List.of(m1, m2, m3, m4, m5, m6, m7, m8));
         }
     }
 }
