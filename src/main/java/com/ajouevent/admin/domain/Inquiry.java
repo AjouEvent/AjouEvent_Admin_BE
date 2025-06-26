@@ -20,15 +20,15 @@ public class Inquiry {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false, unique = true)
-    @OnDelete(action = OnDeleteAction.CASCADE) // 멤버가 삭제되면 블랙리스트 행도 삭제 된다
+    @JoinColumn(name = "member_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
     private String title;
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private InquiryStatus status; // PENDING, ANSWERED, REJECTED
+    private InquiryStatus status; // PENDING, ANSWERED
 
     private String answer; // 관리자가 달아주는 답변
 
