@@ -14,4 +14,5 @@ public class EventBannerRequestDto {
     private String siteUrl;
     private LocalDate startDate;
     private LocalDate endDate;
+    private boolean posted;
 }

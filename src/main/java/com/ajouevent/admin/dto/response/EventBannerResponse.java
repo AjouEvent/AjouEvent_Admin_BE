@@ -7,11 +7,12 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 public class EventBannerResponse {
-    private Long eventBannerId;    // 추가
+    private Long eventBannerId;
     private Long bannerOrder;
     private String imgUrl;
     private String siteUrl;
-    private LocalDate startDate;   // 추가
-    private LocalDate endDate;     // 추가
-    private boolean isPosted;      // 추가
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private boolean isPosted;
+
 }
