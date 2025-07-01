@@ -44,6 +44,7 @@ public class EventBannerService {
         banner.setSiteUrl(dto.getSiteUrl());
         banner.setStartDate(dto.getStartDate());
         banner.setEndDate(dto.getEndDate());
+        banner.setPosted(dto.isPosted());
 
         return eventBannerRepository.save(banner);
     }
